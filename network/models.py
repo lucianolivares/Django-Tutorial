@@ -1,8 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.conf import settings
+import uuid
 
 class Post(models.Model):
+    identifier = models.UUIDField(primary_key=True, default=uuid.uuid4)
     slug = models.SlugField(max_length=250)
     description = models.TextField()
     image = models.ImageField(
@@ -12,7 +15,7 @@ class Post(models.Model):
     published = models.DateTimeField(default=timezone.now)
     likes = models.IntegerField()
     author = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='network_post'
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='network_post'
     )
 
     class Meta:

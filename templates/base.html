@@ -12,18 +12,39 @@
 </head>
 
 <body>
+  {% include "user/login.html" %}
   <header>
-    <nav class="navbar navbar-light bg-light">
+    <nav class="navbar shadow navbar-light bg-light">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="/">
           <img
             src="https://cdn.iconscout.com/icon/free/png-256/network-nodes-connection-sharing-social-media-1-9592.png"
             class="me-2" height="40" alt="" loading="lazy" />
           <small>My Network</small>
         </a>
+
+        <div class="d-flex align-items-center me-3">
+          {% if user.is_authenticated %}
+          <a href={% url 'users:profile' %}>
+            <img src={{ user.profile_pic.url }} class="rounded-circle" height="30" width='30' alt="" loading="lazy" />
+          </a>
+          {% else %}
+          <button type="button" class="btn btn-primary" data-mdb-toggle='modal' data-mdb-target='#loginModal'>
+            Iniciar Sesión
+          </button>
+          {% endif %}
+        </div>
+      </div>
+
       </div>
     </nav>
   </header>
+
+  {% for message in messages %}
+  <div class="alert alert-{{message.tags}} alert-dismissible fade show" role='alert'>
+    {{ message }}
+  </div>
+  {% endfor %}
 
   <div id="content">{% block content %} {% endblock %}</div>
 

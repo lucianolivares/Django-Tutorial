@@ -1,0 +1,37 @@
+{% extends "../base.html" %}
+
+{% block content %}
+<div class='container d-flex justify-content-center mt-5 col-md-10 col-xl-8'>
+  <div class="card shadow-4-strong mb-3">
+    <div class="row g-0">
+      <div class="col-md-5">
+        <img src={{ user_detail.profile_pic.url }} alt="..." class="img-fluid rounded" />
+      </div>
+      <div class="col-md-7">
+        <div class="card-body">
+          <div class='row justify-content-center'>
+            <h4 class="col-12 card-title text-center mb-4">{{ user_detail.first_name}} {{ user_detail.last_name}}</h4>
+            <p class="col-4 text-center mb-0">Publicaciones</p>
+            <p class="col-4 text-center mb-0">Seguidores</p>
+            <p class="col-4 text-center mb-0">Seguidos</p>
+
+            <p class="col-4 text-center"><strong>{{ user_detail.count_posts }}</strong></p>
+            <p class="col-4 text-center"><strong>{{ user_detail.followers.all|length }}</strong></p>
+            <p class="col-4 text-center"><strong>{{ user_detail.count_following }}</strong></p>
+
+
+            <p class="card-text text-center mb-5">{{ user_detail.bio }}</p>
+            {% if is_follower %}
+            <a type="button" class="btn btn-secondary btn-rounded col-5"
+              href={% url 'users:follow' slug=user_detail.slug %}>Dejar de Seguir</a>
+            {% elif user_detail != user and user.email %}
+            <a type="button" id='follow' class="btn btn-primary btn-rounded col-5"
+              href={% url 'users:follow' slug=user_detail.slug %}>Seguir</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
