@@ -21,12 +21,19 @@
 
 
             <p class="card-text text-center mb-5">{{ user_detail.bio }}</p>
-            {% if is_follower %}
+            {% if user_detail %}
+            <a class='btn btn-danger btn-rounded col-5' href={% url 'users:logout'%}>
+              Cerrar Sesion
+            </a>
+            {% endif %}
+            {% if user in user_detail.followers.all %}
             <a type="button" class="btn btn-secondary btn-rounded col-5"
               href={% url 'users:follow' slug=user_detail.slug %}>Dejar de Seguir</a>
-            {% elif user_detail != user and user.email %}
+            {% elif user_detail != user and user.is_authenticated %}
             <a type="button" id='follow' class="btn btn-primary btn-rounded col-5"
               href={% url 'users:follow' slug=user_detail.slug %}>Seguir</a>
+            {% else %}
+            
             {% endif %}
           </div>
         </div>
