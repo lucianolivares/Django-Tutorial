@@ -77,14 +77,13 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 
     def count_following(self):
         users_following = UserProfile.objects.filter(followers=self)
-        print(users_following)
         return users_following.count()
 
     def count_posts(self):
         return Post.objects.filter(author=self).count()
 
     def is_follower(self, other_user):
-        if UserProfile.objects.filter(followers=other_user):
+        if other_user in self.followers.all():
             return True
         return False
 

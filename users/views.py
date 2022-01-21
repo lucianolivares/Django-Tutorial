@@ -49,6 +49,8 @@ def signup_view(request):
             print(e)
             return JsonResponse({'detail': f'{e}'})
 
+    messages.warning(request, 'Las Contrasenas no coinciden')
+    return redirect('network:home')
 
 def logout_view(request):
     logout(request)
@@ -61,16 +63,11 @@ def profile_view(request):
 
 
 def user_detail(request, slug):
-    user = get_object_or_404(get_user_model(), slug=slug)
-    is_follower = False
-    try:
-        if user.is_follower(request.user):
-            is_follower = True
-    except:
-        messages.warning(
-            request, 'Debes Iniciar sesion para mas funcionalidades')
+    user_detail = get_object_or_404(get_user_model(), slug=slug)
+    if not request.user.is_authenticated:
+        messages.warning(request, 'Debes Iniciar sesion para mas funcionalidades')
 
-    return render(request, 'user/user_detail.html', {'user_detail': user, "is_follower": is_follower})
+    return render(request, 'user/user_detail.html', {'user_detail': user_detail})
 
 
 @login_required(login_url='network:home')

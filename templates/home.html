@@ -3,27 +3,57 @@
 {% block content %}
 
 <div class='container col-md-8 col-xl-6'>
-  <h1 class='text-center my-4'>Últimos Posts</h1>
+  <h2 class='text-center my-4'>Últimas Publicaciones</h2>
 
   {% for post in posts %}
-  <div class="card shadow border mb-3">
-    <img src={{post.image.url}} class="card-img-top" />
 
-    <div class="card-body">
-      <a href={{ post.author.get_absolute_url }}>
-        <h5 class="card-title">{{post.author}}</h5>
-      </a>
-      <p class="card-text">
-        {{post.description}}
-      </p>
+  <div class="card shadow border mb-3 p-4">
+    <a href={{ post.get_absolute_url }}>
+      <img src = "{{post.image.url}}" class = "card-img-top m-0" / >
+    </a>
+
+    <div class="border-0 p-0 d-flex">
+      <div class="col-8">
+        <a href={{ post.author.get_absolute_url }}>
+          <h4 class="m-0"> {{post.author}}</h4>
+        </a>
+        <p class="mb-1">
+          {{post.description}}
+        </p>
+      </div>
+      
+      <div id="{{ post.identifier }}"class='d-flex justify-content-end col-4 p-0'>
+        <a
+          type="button"
+          data-post="{{post.identifier}}"
+          class="fs-5 text-reset like-button"
+          >
+          {% if user in post.likes.all %}
+          <i class="fas fa-heart text-danger"></i>
+          {% else%}
+          <i class="far fa-heart"></i>
+          {% endif %}
+        </a>
+        <p class="fw-bold fs-5 px-1">{{post.likes.all | length}}</p>
+        <p class="fw-bold fs-5 col-auto">Me gusta</p>
+      </div>
+
     </div>
 
-    <div class='card-footer'>
-      <p class="card-text">
-        <small class="text-muted">{{post.published}}</small>
-      </p>
-    </div>
+    <hr class="mt-0"/>
 
+    <div class="mb-1 comment-div border-0">
+      {% for comment in post.get_comments %}
+      <p class="mb-0">
+        <strong>{{ comment.user }}</strong> {{ comment.body }}
+      </p>
+      {% endfor %}
+    </div>
+    
+    <hr />
+    <div class="card-footer border-0 py-0">
+      <p class="card-text"><small class="text-muted"> {{post.published}} </small></p>
+    </div>
   </div>
   {% endfor %}
 
